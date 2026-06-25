@@ -313,6 +313,7 @@ dependencies = [
     { name = "langchain-text-splitters" },
     { name = "pinecone" },
     { name = "streamlit" },
+    { name = "watchdog" },
 ]
 
 [package.metadata]
@@ -330,6 +331,7 @@ requires-dist = [
     { name = "langchain-text-splitters", specifier = ">=1.1.2" },
     { name = "pinecone", specifier = ">=7.3.0" },
     { name = "streamlit", specifier = ">=1.58.0" },
+    { name = "watchdog", specifier = ">=6.0.0" },
 ]
 
 [[package]]

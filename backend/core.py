@@ -20,7 +20,7 @@ def retrieve_context(query:str)->Dict[str, Any]:
     """Retrieve Context for the query given by user from the vector store"""
     retrieved_docs = retriever.invoke(query)
     serialized_docs = "\n\n".join(
-        f"source={doc.metadata.get('source', 'Unknown')}\n\nContent:{doc.page_content}" for doc in retrieved_docs
+        f"source={doc.metadata.get('source')}\n\nContent:{doc.page_content}" for doc in retrieved_docs
     )
     return serialized_docs, retrieved_docs
 
@@ -56,12 +56,16 @@ def run_llm(query:str):
     print(response)
     content = response["messages"][-1].content
 
-    #Loop through messages and get the sources of the retrieved documents
+    # Loop through messages and get the sources of the retrieved documents
     context_docs = []
 
     for message in response["messages"]:
-        if isinstance(message, ToolMessage) and hasattr(message,"artifact"):
-            context_docs.append(message.artifact)
+        if isinstance(message, ToolMessage) and hasattr(message, "artifact"):
+            artifact = message.artifact
+            if isinstance(artifact, list):
+                context_docs.extend(artifact)
+            else:
+                context_docs.append(artifact)
 
     print("Length of context_docs:", len(context_docs))
     return {"answer": content, "context": context_docs}
